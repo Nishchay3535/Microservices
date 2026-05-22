@@ -20,7 +20,7 @@ origins = [o.strip() for o in settings.CORS_ORIGINS.split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins or ["*"],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1):\d+",
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,10 +52,8 @@ app.include_router(ws_chat.router)
 @app.on_event("startup")
 async def on_startup() -> None:
     await init_db()
-    # Docker / default local DB is SQLite; ensure demo mentor exists without a manual seed step.
-    if "sqlite" in settings.DATABASE_URL.lower():
-        async with SessionLocal() as db:
-            await upsert_demo_users(db)
+    async with SessionLocal() as db:
+        await upsert_demo_users(db)
 
 
 @app.get("/health")

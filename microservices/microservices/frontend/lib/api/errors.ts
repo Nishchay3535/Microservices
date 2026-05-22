@@ -9,7 +9,11 @@ export function getApiErrorMessage(err: unknown, fallback = "Something went wron
     return err instanceof Error ? err.message : fallback;
   }
   if (!err.response) {
-    return "Cannot reach API. Start the backend (uvicorn) and set NEXT_PUBLIC_API_URL in .env.local — e.g. http://127.0.0.1:8000/api/v1";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (apiUrl) {
+      return `Cannot reach API at ${apiUrl}. Check that Render is running, the URL ends with /api/v1, and CORS_ORIGINS includes your Vercel domain.`;
+    }
+    return "Cannot reach API. Set NEXT_PUBLIC_API_URL to your Render backend, e.g. https://your-app.onrender.com/api/v1";
   }
   const data = err.response?.data as { detail?: unknown } | undefined;
   const detail = data?.detail;
