@@ -10,7 +10,7 @@ settings = get_settings()
 
 _engine_kwargs: dict = {"echo": False, "future": True}
 if settings.DATABASE_URL.startswith("postgresql"):
-    # Neon and other hosted Postgres require SSL; asyncpg ignores ?sslmode= in the URL.
+    # Hosted Postgres (Render, Neon, etc.) requires SSL; libpq sslmode is stripped in config.
     _engine_kwargs["connect_args"] = {"ssl": True}
 
 engine = create_async_engine(settings.DATABASE_URL, **_engine_kwargs)

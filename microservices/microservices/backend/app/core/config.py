@@ -1,6 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -8,6 +9,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 # Resolve backend/.env regardless of process cwd (uvicorn may start from repo root).
 _BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
 _ENV_FILE = _BACKEND_DIR / ".env"
+
+# libpq URL params (e.g. Render ?sslmode=require) are not valid asyncpg connect() kwargs.
+_LIBPQ_QUERY_PARAMS = frozenset(
+    {"sslmode", "sslcert", "sslkey", "sslrootcert", "channel_binding"}
+)
 
 
 class Settings(BaseSettings):
@@ -33,6 +39,14 @@ class Settings(BaseSettings):
             value = "postgresql://" + value[len("postgres://") :]
         if value.startswith("postgresql://"):
             value = value.replace("postgresql://", "postgresql+asyncpg://", 1)
+
+        parsed = urlparse(value)
+        if parsed.query:
+            params = parse_qs(parsed.query, keep_blank_values=True)
+            filtered = {k: v for k, v in params.items() if k.lower() not in _LIBPQ_QUERY_PARAMS}
+            value = urlunparse(
+                parsed._replace(query=urlencode(filtered, doseq=True) if filtered else "")
+            )
         return value
 
     REDIS_URL: Optional[str] = None
