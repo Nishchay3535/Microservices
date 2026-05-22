@@ -1,0 +1,16 @@
+.venv/
+env/
+node_modules/
+__pycache__/
+.env
+backend/.env
+
+# Nested monorepo paths
+**/backend/.venv/
+**/frontend/node_modules/
+**/.next/
+*.pyc
+.pytest_cache/
+*.db
+.env.local
+frontend/.env.local

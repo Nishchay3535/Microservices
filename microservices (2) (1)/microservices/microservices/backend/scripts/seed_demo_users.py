@@ -21,9 +21,9 @@ async def main() -> None:
     await init_db()
     async with SessionLocal() as db:
         await upsert_demo_users(db)
-    print("Upserted demo users (password for all: demo12345):")
-    for email, _, _ in DEMO_USERS:
-        print(" -", email)
+    print("Upserted users:")
+    for email, _, role, _ in DEMO_USERS:
+        print(f" - {email} ({role})")
 
 
 if __name__ == "__main__":

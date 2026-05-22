@@ -7,11 +7,13 @@ from app.core.config import get_settings
 from app.db.base import Base
 
 settings = get_settings()
-engine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=False,
-    future=True,
-)
+
+_engine_kwargs: dict = {"echo": False, "future": True}
+if settings.DATABASE_URL.startswith("postgresql"):
+    # Neon and other hosted Postgres require SSL; asyncpg ignores ?sslmode= in the URL.
+    _engine_kwargs["connect_args"] = {"ssl": True}
+
+engine = create_async_engine(settings.DATABASE_URL, **_engine_kwargs)
 SessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
@@ -22,7 +24,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db() -> None:
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(Base.metadata.create_all, checkfirst=True)
 
         def add_avatar_column(sync_conn):
             inspector = inspect(sync_conn)
