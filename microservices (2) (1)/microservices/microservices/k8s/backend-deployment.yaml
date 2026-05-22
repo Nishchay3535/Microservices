@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healthequity-api
+  namespace: healthequity
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: healthequity-api
+  template:
+    metadata:
+      labels:
+        app: healthequity-api
+    spec:
+      containers:
+        - name: api
+          image: your-registry/healthequity-api:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: healthequity-config
+            - secretRef:
+                name: healthequity-secrets
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: healthequity-api
+  namespace: healthequity
+spec:
+  selector:
+    app: healthequity-api
+  ports:
+    - port: 80
+      targetPort: 8000

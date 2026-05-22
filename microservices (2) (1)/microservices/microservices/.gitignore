@@ -1,0 +1,15 @@
+# Secrets — never commit
+backend/.env
+.env
+.env.local
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.db
+
+# Node
+frontend/node_modules/
+frontend/.next/

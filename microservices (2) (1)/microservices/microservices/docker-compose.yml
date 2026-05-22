@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:///./data/healthequity.db
+      SECRET_KEY: change-me-for-local-docker
+      CORS_ORIGINS: http://localhost:3000
+      FRONTEND_URL: http://localhost:3000
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - backend-data:/app/data
+    depends_on:
+      - redis
+
+volumes:
+  backend-data:

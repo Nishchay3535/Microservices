@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: healthequity-config
+  namespace: healthequity
+data:
+  CORS_ORIGINS: "https://your-frontend.vercel.app"
+  FRONTEND_URL: "https://your-frontend.vercel.app"
+  AI_MODEL: "gpt-4o-mini"
