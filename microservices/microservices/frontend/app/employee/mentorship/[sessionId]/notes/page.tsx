@@ -127,8 +127,8 @@ export default function EmployeeSessionNotesPage() {
                       )}
                     </div>
                     <Button
-                      size="sm"
                       variant={action.completed ? "primary" : "outline"}
+                      className="px-3 py-1.5 text-xs"
                       onClick={() => handleToggleAction(index, !action.completed)}
                     >
                       {action.completed ? "✓ Completed" : "Mark Complete"}
