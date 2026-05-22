@@ -1,0 +1,24 @@
+# Render Blueprint — repo root. Service root: microservices/microservices/backend
+services:
+  - type: web
+    name: healthequity-api
+    runtime: docker
+    plan: free
+    rootDir: microservices/microservices/backend
+    dockerfilePath: Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: AI_MODEL
+        value: llama-3.1-8b-instant

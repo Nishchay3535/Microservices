@@ -46,7 +46,7 @@ Deploy **frontend** and **backend** separately (standard for this stack). Total 
 3. Settings:
    | Field | Value |
    |-------|--------|
-   | **Root Directory** | `microservices/microservices/backend` (adjust if your repo root differs) |
+   | **Root Directory** | `microservices/microservices/backend` |
    | **Runtime** | **Docker** |
    | **Dockerfile Path** | `Dockerfile` |
    | **Instance type** | **Free** |
@@ -151,9 +151,5 @@ If your GitHub repo root is the folder that contains `backend` and `frontend`:
 - Backend root: `backend`
 - Frontend root: `frontend`
 
-If the repo root is one level higher, use:
-
-- Backend: `microservices/microservices/backend`
-- Frontend: `microservices/microservices/frontend`
-
-Match what you see in GitHub when importing to Render/Vercel.
+Render **Root Directory**: `microservices/microservices/backend`  
+Vercel **Root Directory**: `microservices/microservices/frontend`
