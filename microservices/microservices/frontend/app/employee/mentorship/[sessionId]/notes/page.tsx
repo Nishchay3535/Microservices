@@ -128,7 +128,7 @@ export default function EmployeeSessionNotesPage() {
                     </div>
                     <Button
                       size="sm"
-                      variant={action.completed ? "default" : "outline"}
+                      variant={action.completed ? "primary" : "outline"}
                       onClick={() => handleToggleAction(index, !action.completed)}
                     >
                       {action.completed ? "✓ Completed" : "Mark Complete"}
