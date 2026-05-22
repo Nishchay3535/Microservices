@@ -76,7 +76,7 @@ export default function KudosPage() {
       } else {
         alert("Failed to send kudos");
       }
-    } catch (error) {
+    } catch {
       alert("Error sending kudos");
     } finally {
       setSubmitting(false);

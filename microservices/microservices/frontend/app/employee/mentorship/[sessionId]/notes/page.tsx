@@ -7,11 +7,17 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/common/Button";
 import { Card } from "@/components/common/UI";
 
+interface FollowUpAction {
+  action: string;
+  due_date?: string;
+  completed?: boolean;
+}
+
 interface SessionNotes {
   id: string;
   summary: string;
   key_takeaways: string[];
-  follow_up_actions: any[];
+  follow_up_actions: FollowUpAction[];
   created_at: string;
   updated_at: string;
 }
@@ -62,7 +68,7 @@ export default function EmployeeSessionNotesPage() {
       } else {
         alert("Failed to update action");
       }
-    } catch (error) {
+    } catch {
       alert("Error updating action");
     }
   };
@@ -110,7 +116,7 @@ export default function EmployeeSessionNotesPage() {
             <div>
               <h3 className="font-semibold">Follow-up Actions</h3>
               <div className="space-y-2 mt-1">
-                {notes.follow_up_actions.map((action: any, index: number) => (
+                {notes.follow_up_actions.map((action, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border rounded-md">
                     <div className="flex-1">
                       <p className="text-sm">{action.action}</p>

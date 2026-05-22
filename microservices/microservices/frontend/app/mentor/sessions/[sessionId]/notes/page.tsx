@@ -7,11 +7,17 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { Button } from "@/components/common/Button";
 import { Card } from "@/components/common/UI";
 
+interface FollowUpAction {
+  action: string;
+  due_date?: string;
+  completed?: boolean;
+}
+
 interface SessionNotes {
   id: string;
   summary: string;
   key_takeaways: string[];
-  follow_up_actions: any[];
+  follow_up_actions: FollowUpAction[];
   created_at: string;
   updated_at: string;
 }
@@ -81,7 +87,7 @@ export default function MentorSessionNotesPage() {
       } else {
         alert("Failed to save notes");
       }
-    } catch (error) {
+    } catch {
       alert("Error saving notes");
     } finally {
       setSubmitting(false);
@@ -140,7 +146,7 @@ export default function MentorSessionNotesPage() {
               <div>
                 <h3 className="font-semibold">Follow-up Actions</h3>
                 <ul className="list-disc list-inside text-sm mt-1">
-                  {notes.follow_up_actions.map((action: any, index: number) => (
+                  {notes.follow_up_actions.map((action, index) => (
                     <li key={index}>
                       {action.action}
                       {action.due_date && (
